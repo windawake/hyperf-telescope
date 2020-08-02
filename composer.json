@@ -1,0 +1,30 @@
+{
+    "name": "windawake/hyperf-telescope",
+    "description": "An elegant debug assistant for the hyperf framework.",
+    "keywords": ["swoole", "hyperf", "monitoring", "debugging"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "fengchezhi",
+            "email": "619146134@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "ext-swoole": ">=4.5",
+        "hyperf/framework": "2.0.*",
+        "hyperf/di": "2.0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wind\\Telescope\\": "src/"
+        }
+    },
+    "extra": {
+        "hyperf": {
+            "config": "Wind\\Telescope\\ConfigProvider"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
