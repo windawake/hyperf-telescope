@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Hyperf\Utils\Context;
 use Wind\Telescope\EntryType;
 use Wind\Telescope\IncomingEntry;
 use Wind\Telescope\Model\TelescopeEntryModel;
@@ -32,6 +33,8 @@ class IncomingMiddleWare implements MiddlewareInterface
         // var_dump(get_class_methods($request));
         // var_dump($handler);
         $response = $handler->handle($request);
+        
+        
 
         if(strpos($request->getRequestTarget(), 'telescope') === false){
             $entry = IncomingEntry::make([
@@ -49,9 +52,29 @@ class IncomingMiddleWare implements MiddlewareInterface
                 'memory' => round(memory_get_peak_usage(true) / 1024 / 1025, 1),
             ]);
     
-            $entry->batchId($entry->uuid)->type(EntryType::REQUEST);
+            $batchId = $entry->uuid;
+            $entry->batchId($batchId)->type(EntryType::REQUEST);
     
             TelescopeEntryModel::create($entry->toArray());
+
+            $arr = Context::get('query_listener', []);
+            $optionSlow = 500;
+            foreach($arr as [$event, $sql]) {
+                $entry = IncomingEntry::make([
+                    'connection' => $event->connectionName,
+                    'bindings' => [],
+                    'sql' => $sql,
+                    'time' => number_format($event->time, 2, '.', ''),
+                    'slow' => $event->time >= $optionSlow,
+                    // 'file' => $caller['file'],
+                    // 'line' => $caller['line'],
+                    'hash' => md5($sql),
+                ]);
+
+                $entry->batchId($batchId)->type(EntryType::QUERY);
+
+                TelescopeEntryModel::create($entry->toArray());
+            }
         }
 
         return $response;
