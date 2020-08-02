@@ -9,7 +9,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-
+use Wind\Telescope\EntryType;
+use Wind\Telescope\IncomingEntry;
+use Wind\Telescope\Model\TelescopeEntryModel;
 
 class IncomingMiddleWare implements MiddlewareInterface
 {
@@ -25,23 +27,47 @@ class IncomingMiddleWare implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        // var_dump($request->getRemoteAddr(), get_class_methods($request));
+        // var_dump($request->getUri(),$request->getMethod(),$request->getHeaders(), $request->getServerParams());
+        // var_dump(get_class_methods($request));
+        // var_dump($handler);
         $response = $handler->handle($request);
-        // $entry = IncomingEntry::make([
-        //     'ip_address' => $event->request->ip(),
-        //     'uri' => str_replace($event->request->root(), '', $event->request->fullUrl()) ?: '/',
-        //     'method' => $event->request->method(),
-        //     'controller_action' => optional($event->request->route())->getActionName(),
-        //     'middleware' => array_values(optional($event->request->route())->gatherMiddleware() ?? []),
-        //     'headers' => $this->headers($event->request->headers->all()),
-        //     'payload' => $this->payload($this->input($event->request)),
-        //     'session' => $this->payload($this->sessionVariables($event->request)),
-        //     'response_status' => $event->response->getStatusCode(),
-        //     'response' => $this->response($event->response),
-        //     'duration' => $startTime ? floor((microtime(true) - $startTime) * 1000) : null,
-        //     'memory' => round(memory_get_peak_usage(true) / 1024 / 1025, 1),
-        // ]);
+
+        if(strpos($request->getRequestTarget(), 'telescope') === false){
+            $entry = IncomingEntry::make([
+                'ip_address' => $request->getServerParams()['remote_addr'],
+                'uri' => $request->getRequestTarget(),
+                'method' => $request->getMethod(),
+                // 'controller_action' => optional($event->request->route())->getActionName(),
+                // 'middleware' => array_values(optional($event->request->route())->gatherMiddleware() ?? []),
+                'headers' => $request->getHeaders(),
+                'payload' => $request->getParsedBody(),
+                'session' => '',
+                'response_status' => $response->getStatusCode(),
+                'response' => $this->response($response),
+                // 'duration' => $startTime ? floor((microtime(true) - $startTime) * 1000) : null,
+                'memory' => round(memory_get_peak_usage(true) / 1024 / 1025, 1),
+            ]);
+    
+            $entry->batchId($entry->uuid)->type(EntryType::REQUEST);
+    
+            TelescopeEntryModel::create($entry->toArray());
+        }
 
         return $response;
+    }
+
+    protected function response(ResponseInterface $response)
+    {
+        $content = $response->getBody()->getContents();
+        if (is_string($content) && $response->getContentType() == 'application/json') {
+            if (is_array(json_decode($content, true)) &&
+                json_last_error() === JSON_ERROR_NONE) {
+                    return json_decode($content, true);
+            }
+        }
+
+        return $content;
     }
 
 }

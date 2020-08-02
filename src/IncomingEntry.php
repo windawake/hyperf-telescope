@@ -69,7 +69,7 @@ class IncomingEntry
     {
         $this->uuid = (string) Str::orderedUuid();
 
-        $this->recordedAt = now();
+        $this->recordedAt = date('Y-m-d H:i:s');
 
         $this->content = array_merge($content, ['hostname' => gethostname()]);
 
@@ -271,7 +271,7 @@ class IncomingEntry
             'family_hash' => $this->familyHash,
             'type' => $this->type,
             'content' => $this->content,
-            'created_at' => $this->recordedAt->toDateTimeString(),
+            'created_at' => $this->recordedAt,
         ];
     }
 }
