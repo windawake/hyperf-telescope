@@ -15,21 +15,23 @@ namespace Wind\Telescope\Listener;
 use Hyperf\Database\Events\QueryExecuted;
 use Hyperf\Event\Annotation\Listener;
 use Hyperf\Event\Contract\ListenerInterface;
+use Hyperf\Logger\LoggerFactory;
 use Hyperf\Utils\Arr;
 use Hyperf\Utils\Str;
-use Hyperf\Utils\ApplicationContext;
-use Hyperf\HttpServer\Contract\RequestInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Hyperf\Utils\Context;
-use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @Listener
  */
 class QueryListener implements ListenerInterface
 {
+
     public function listen(): array
     {
         return [
+            QueryExecuted::class,
         ];
     }
 
@@ -45,9 +47,7 @@ class QueryListener implements ListenerInterface
                     $sql = Str::replaceFirst('?', "'{$value}'", $sql);
                 }
             }
-
-            $this->logger->info(sprintf('[%s] %s', $event->time, $sql));
-            $this->stdLogger->info(sprintf('[%s] %s', $event->time, $sql));
+            // var_dump($sql);
 
             $arr = Context::get('query_listener', []);
 
