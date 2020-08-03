@@ -12,7 +12,13 @@ declare(strict_types=1);
 namespace Wind\Telescope\Controller;
 
 use Wind\Telescope\EntryType;
+use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\GetMapping;
+use Hyperf\HttpServer\Annotation\PostMapping;
 
+/**
+ * @Controller()
+ */
 class RequestsController extends EntryController
 {
 
@@ -35,5 +41,21 @@ class RequestsController extends EntryController
     {
         // return RequestWatcher::class;
         return null;
+    }
+
+    /**
+     * @PostMapping(path="/telescope/telescope-api/requests")
+     */
+    public function list()
+    {
+        return $this->index();
+    }
+
+    /**
+     * @GetMapping(path="/telescope/telescope-api/requests/{id}")
+     */
+    public function detail($id)
+    {
+        return $this->show($id);
     }
 }

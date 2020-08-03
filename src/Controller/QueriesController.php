@@ -10,7 +10,13 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 namespace Wind\Telescope\Controller;
+use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\GetMapping;
+use Hyperf\HttpServer\Annotation\PostMapping;
 
+/**
+ * @Controller()
+ */
 class QueriesController extends EntryController
 {
 
@@ -33,5 +39,21 @@ class QueriesController extends EntryController
     {
         // return RequestWatcher::class;
         return null;
+    }
+
+    /**
+     * @PostMapping(path="/telescope/telescope-api/queries")
+     */
+    public function list()
+    {
+        return $this->index();
+    }
+
+    /**
+     * @GetMapping(path="/telescope/telescope-api/queries/{id}")
+     */
+    public function detail($id)
+    {
+        return $this->show($id);
     }
 }

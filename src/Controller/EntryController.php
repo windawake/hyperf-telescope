@@ -54,20 +54,14 @@ abstract class EntryController
      */
     protected $response;
 
-    /**
-     * List the entries of the given type.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Laravel\Telescope\Contracts\EntriesRepository  $storage
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function index(RequestInterface $request)
+
+    public function index()
     {
-        if(!$request->has('before')){
+        if(!$this->request->has('before')){
             return '';
         }
 
-        $entries = TelescopeEntryModel::where('type', $this->entryType())->orderByDesc('created_at')->limit($request->input('take'))->get();
+        $entries = TelescopeEntryModel::where('type', $this->entryType())->orderByDesc('created_at')->limit($this->request->input('take'))->get();
 
         return $this->response->json([
             'entries' => $entries,
@@ -75,13 +69,7 @@ abstract class EntryController
         ]);
     }
 
-    /**
-     * Get an entry with the given ID.
-     *
-     * @param  \Laravel\Telescope\Contracts\EntriesRepository  $storage
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
+    
     public function show($id)
     {
         $entry = TelescopeEntryModel::find($id);
