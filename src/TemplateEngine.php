@@ -7,7 +7,8 @@ namespace Wind\Telescope;
 use Exception;
 use Hyperf\View\Engine\EngineInterface;
 
-class TemplateInstance {
+class TemplateInstance
+{
     protected $view_path = null;
 
     public function __construct($viewPath)
@@ -17,11 +18,11 @@ class TemplateInstance {
 
     public function render($template, $data)
     {
-        $loadFile = $this->view_path.$template.'.blade.php';
-        if(!file_exists($loadFile)){
+        $loadFile = $this->view_path . $template . '.blade.php';
+        if (!file_exists($loadFile)) {
             throw new Exception($loadFile . 'is not found');
         }
-        
+
         return file_get_contents($loadFile);
     }
 }

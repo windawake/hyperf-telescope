@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace Wind\Telescope\Controller;
 
 use Hyperf\View\RenderInterface;
@@ -36,5 +37,4 @@ class ViewController
     {
         return $render->render('index');
     }
-
 }

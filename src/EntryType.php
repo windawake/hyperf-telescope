@@ -1,4 +1,7 @@
-<?php 
+<?php
+
+declare(strict_types=1);
+
 namespace Wind\Telescope;
 
 class EntryType

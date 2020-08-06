@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Wind\Telescope\Model;
 
 use Hyperf\DbConnection\Model\Model;
@@ -28,7 +29,7 @@ class TelescopeEntryModel extends Model
         'type',
         'content',
     ];
-    
+
     /**
      * The name of the "updated at" column.
      *

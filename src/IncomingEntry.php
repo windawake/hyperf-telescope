@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Wind\Telescope;
 
 class IncomingEntry
@@ -144,7 +147,7 @@ class IncomingEntry
             ],
         ]);
 
-        $this->tags(['Auth:'.$user->getAuthIdentifier()]);
+        $this->tags(['Auth:' . $user->getAuthIdentifier()]);
 
         return $this;
     }
@@ -205,7 +208,7 @@ class IncomingEntry
     public function isFailedJob()
     {
         return $this->type === EntryType::JOB &&
-               ($this->content['status'] ?? null) === 'failed';
+            ($this->content['status'] ?? null) === 'failed';
     }
 
     /**

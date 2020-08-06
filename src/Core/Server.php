@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace Wind\Telescope\Core;
 
 use Hyperf\HttpServer\MiddlewareManager;
@@ -50,19 +51,19 @@ class Server extends \Hyperf\HttpServer\Server
             $psr7Response = $this->exceptionHandlerDispatcher->dispatch($throwable, $this->exceptionHandlers);
         } finally {
             // Send the Response to client.
-            if (! isset($psr7Response)) {
+            if (!isset($psr7Response)) {
                 return;
             }
-            if (! isset($psr7Request) || $psr7Request->getMethod() === 'HEAD') {
+            if (!isset($psr7Request) || $psr7Request->getMethod() === 'HEAD') {
                 $this->responseEmitter->emit($psr7Response, $response, false);
             } else {
                 $this->responseEmitter->emit($psr7Response, $response, true);
-                
+
 
                 /**
                  * @var \Hyperf\HttpMessage\Server\Request $psr7Request 
                  */
-                if(strpos($psr7Request->getRequestTarget(), 'telescope') === false){
+                if (strpos($psr7Request->getRequestTarget(), 'telescope') === false) {
                     $entry = IncomingEntry::make([
                         'ip_address' => $psr7Request->getServerParams()['remote_addr'],
                         'uri' => $psr7Request->getRequestTarget(),
@@ -77,16 +78,16 @@ class Server extends \Hyperf\HttpServer\Server
                         'duration' => $startTime ? floor((microtime(true) - $startTime) * 1000) : null,
                         'memory' => round(memory_get_peak_usage(true) / 1024 / 1025, 1),
                     ]);
-            
+
                     $batchId = $entry->uuid;
                     $entry->batchId($batchId)->type(EntryType::REQUEST);
-            
+
                     TelescopeEntryModel::create($entry->toArray());
-        
+
                     $arr = Context::get('query_listener', []);
                     var_dump(array_column($arr, 1));
                     $optionSlow = 500;
-                    foreach($arr as [$event, $sql]) {
+                    foreach ($arr as [$event, $sql]) {
                         $entry = IncomingEntry::make([
                             'connection' => $event->connectionName,
                             'bindings' => [],
@@ -97,18 +98,18 @@ class Server extends \Hyperf\HttpServer\Server
                             // 'line' => $caller['line'],
                             'hash' => md5($sql),
                         ]);
-        
+
                         $entry->batchId($batchId)->type(EntryType::QUERY);
-        
+
                         TelescopeEntryModel::create($entry->toArray());
                     }
 
                     $exception = Context::get('exception_record');
-                    if($exception){
+                    if ($exception) {
                         $trace = collect($exception->getTrace())->map(function ($item) {
                             return Arr::only($item, ['file', 'line']);
                         })->toArray();
-                
+
                         $entry = IncomingEntry::make([
                             'class' => get_class($exception),
                             'file' => $exception->getFile(),
@@ -120,11 +121,9 @@ class Server extends \Hyperf\HttpServer\Server
                         ]);
 
                         $entry->batchId($batchId)->type(EntryType::EXCEPTION);
-        
+
                         TelescopeEntryModel::create($entry->toArray());
                     }
-
-                    
                 }
             }
         }
@@ -137,10 +136,12 @@ class Server extends \Hyperf\HttpServer\Server
             return "Purged By Telescope";
         }
 
-        if (is_string($content) && strpos($response->getContentType(),'application/json') !== false) {
-            if (is_array(json_decode($content, true)) &&
-                json_last_error() === JSON_ERROR_NONE) {
-                    return json_decode($content, true);
+        if (is_string($content) && strpos($response->getContentType(), 'application/json') !== false) {
+            if (
+                is_array(json_decode($content, true)) &&
+                json_last_error() === JSON_ERROR_NONE
+            ) {
+                return json_decode($content, true);
             }
         }
         return $content;

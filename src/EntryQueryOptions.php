@@ -1,4 +1,7 @@
-<?php 
+<?php
+
+declare(strict_types=1);
+
 namespace Wind\Telescope;
 
 class EntryQueryOptions
@@ -54,12 +57,12 @@ class EntryQueryOptions
     public static function fromRequest(RequestInterface $request)
     {
         return (new static)
-                ->batchId($request->batch_id)
-                ->uuids($request->uuids)
-                ->beforeSequence($request->before)
-                ->tag($request->tag)
-                ->familyHash($request->family_hash)
-                ->limit($request->take ?? 50);
+            ->batchId($request->batch_id)
+            ->uuids($request->uuids)
+            ->beforeSequence($request->before)
+            ->tag($request->tag)
+            ->familyHash($request->family_hash)
+            ->limit($request->take ?? 50);
     }
 
     /**

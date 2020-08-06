@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace Wind\Telescope\Controller;
 
 use Hyperf\Di\Annotation\Inject;
@@ -57,7 +58,7 @@ abstract class EntryController
 
     public function index()
     {
-        if(!$this->request->has('before')){
+        if (!$this->request->has('before')) {
             return '';
         }
 
@@ -69,7 +70,7 @@ abstract class EntryController
         ]);
     }
 
-    
+
     public function show($id)
     {
         $entry = TelescopeEntryModel::find($id);

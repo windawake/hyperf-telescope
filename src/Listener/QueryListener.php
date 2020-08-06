@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace Wind\Telescope\Listener;
 
 use Hyperf\Database\Events\QueryExecuted;
@@ -42,22 +43,21 @@ class QueryListener implements ListenerInterface
     {
         if ($event instanceof QueryExecuted) {
             $sql = $event->sql;
-            if (! Arr::isAssoc($event->bindings)) {
+            if (!Arr::isAssoc($event->bindings)) {
                 foreach ($event->bindings as $key => $value) {
                     $sql = Str::replaceFirst('?', "'{$value}'", $sql);
                 }
             }
 
-            if (!strpos($sql, 'telescope')){
-                var_dump($sql);
-                
+            if (!strpos($sql, 'telescope')) {
+                // var_dump($sql);
+
                 $arr = Context::get('query_listener', []);
 
                 $arr[] = [$event, $sql];
-    
+
                 Context::set('query_listener', $arr);
             }
-            
         }
     }
 }
