@@ -62,7 +62,14 @@ abstract class EntryController
             return '';
         }
 
-        $entries = TelescopeEntryModel::where('type', $this->entryType())->orderByDesc('created_at')->limit($this->request->input('take'))->get();
+        $limit = $this->request->input('take');
+        $entries = TelescopeEntryModel::where('type', $this->entryType())->orderByDesc('sequence')->limit($limit)->get()->toArray();
+
+        foreach ($entries as &$item) {
+            if (isset($item['content']['response'])) {
+                $item['content']['response'] = '';
+            }
+        }
 
         return $this->response->json([
             'entries' => $entries,
@@ -78,7 +85,7 @@ abstract class EntryController
             "Auth:25",
             "method:GET"
         ];
-        $batch = TelescopeEntryModel::where('batch_id', $entry->batch_id)->orderByDesc('uuid')->get();
+        $batch = TelescopeEntryModel::where('batch_id', $entry->batch_id)->orderByDesc('sequence')->get();
 
         return $this->response->json([
             'entry' => $entry,
