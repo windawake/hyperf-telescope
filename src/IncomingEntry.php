@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Wind\Telescope;
 
+use Carbon\Carbon;
+
 class IncomingEntry
 {
     /**
@@ -72,7 +74,7 @@ class IncomingEntry
     {
         $this->uuid = (string) Str::orderedUuid();
 
-        $this->recordedAt = date('Y-m-d H:i:s');
+        $this->recordedAt = Carbon::now('Asia/Shanghai');
 
         $this->content = array_merge($content, ['hostname' => gethostname()]);
 
