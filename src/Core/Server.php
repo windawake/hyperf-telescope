@@ -85,7 +85,6 @@ class Server extends \Hyperf\HttpServer\Server
                     TelescopeEntryModel::create($entry->toArray());
 
                     $arr = Context::get('query_listener', []);
-                    var_dump(array_column($arr, 1));
                     $optionSlow = 500;
                     foreach ($arr as [$event, $sql]) {
                         $entry = IncomingEntry::make([
