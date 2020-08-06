@@ -35,7 +35,7 @@ class ConfigProvider
                 ],
             ],
             'server' => [
-                'settin  gs' => [
+                'settings' => [
                     // 静态资源
                     'document_root' => BASE_PATH . '/vendor/windawake/hyperf-telescope/public',
                     'enable_static_handler' => true,
