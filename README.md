@@ -1,6 +1,5 @@
-复制migrations到根目录，然后执行`php ./bin/hyperf.php migrate`
 
 
-composer require hyperf/view
+复制migrations到根目录，然后执行`php ./bin/hyperf.php migrate` 或者执行`telescope.sql`
 
-php ./bin/hyperf.php vendor:publish hyperf/view
+点击访问地址 `http://127.0.0.1:9501/telescope/requests`
