@@ -74,7 +74,7 @@ class IncomingEntry
     {
         $this->uuid = (string) Str::orderedUuid();
 
-        $this->recordedAt = Carbon::now('Asia/Shanghai');
+        $this->recordedAt = Carbon::now('Asia/Shanghai')->toDateTimeString();
 
         $this->content = array_merge($content, ['hostname' => gethostname()]);
 
