@@ -11,18 +11,16 @@ declare(strict_types=1);
  */
 namespace Wind\Telescope;
 
-use Hyperf\HttpServer\Router\Router;
-use Hyperf\Utils\ApplicationContext;
-
 class ConfigProvider
 {
     public function __invoke(): array
     {
         return [
             'dependencies' => [
-                \Hyperf\HttpServer\CoreMiddleware::class => \Wind\Telescope\Middleware\CoreMiddleware::class,
+                \Hyperf\HttpServer\Server::class => \Wind\Telescope\Core\Server::class,
             ],
             'commands' => [
+                \Wind\Telescope\Command\ClearCommand::class
             ],
             'view' => [
                 'engine' => \Wind\Telescope\TemplateEngine::class,
@@ -49,7 +47,7 @@ class ConfigProvider
             'exceptions' => [
                 'handler' => [
                     'http' => [
-                        \Qbhy\HyperfAuth\AuthExceptionHandler::class,
+                        \Wind\Telescope\Listener\ErrorRecord::class,
                     ]
                 ]
             ],

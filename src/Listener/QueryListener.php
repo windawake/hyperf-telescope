@@ -47,13 +47,17 @@ class QueryListener implements ListenerInterface
                     $sql = Str::replaceFirst('?', "'{$value}'", $sql);
                 }
             }
-            // var_dump($sql);
 
-            $arr = Context::get('query_listener', []);
+            if (!strpos($sql, 'telescope')){
+                var_dump($sql);
+                
+                $arr = Context::get('query_listener', []);
 
-            $arr[] = [$event, $sql];
-
-            Context::set('query_listener', $arr);
+                $arr[] = [$event, $sql];
+    
+                Context::set('query_listener', $arr);
+            }
+            
         }
     }
 }

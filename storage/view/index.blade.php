@@ -27,29 +27,6 @@
             </svg>
 
             <h4 class="mb-0 ml-3"><strong>Hyperf</strong> Telescope</h4>
-
-            <button class="btn btn-outline-primary ml-auto mr-3" v-on:click.prevent="toggleRecording" title="Play/Pause">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="icon fill-primary" v-if="recording">
-                    <path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/>
-                </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="icon fill-primary" v-else>
-                    <path d="M4 4l12 6-12 6z"/>
-                </svg>
-            </button>
-
-            <button class="btn btn-outline-primary mr-3" :class="{active: autoLoadsNewEntries}" v-on:click.prevent="autoLoadNewEntries" title="Auto Load Entries">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="icon fill-primary">
-                    <path d="M10 3v2a5 5 0 0 0-3.54 8.54l-1.41 1.41A7 7 0 0 1 10 3zm4.95 2.05A7 7 0 0 1 10 17v-2a5 5 0 0 0 3.54-8.54l1.41-1.41zM10 20l-4-4 4-4v8zm0-12V0l4 4-4 4z"></path>
-                </svg>
-            </button>
-
-            <div class="btn-group" role="group" aria-label="Basic example">
-                <router-link tag="button" to="/monitored-tags" class="btn btn-outline-primary" active-class="active" title="Monitoring">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="icon fill-primary">
-                        <path d="M12 10a2 2 0 0 1-3.41 1.41A2 2 0 0 1 10 8V0a9.97 9.97 0 0 1 10 10h-8zm7.9 1.41A10 10 0 1 1 8.59.1v2.03a8 8 0 1 0 9.29 9.29h2.02zm-4.07 0a6 6 0 1 1-7.25-7.25v2.1a3.99 3.99 0 0 0-1.4 6.57 4 4 0 0 0 6.56-1.42h2.1z"></path>
-                    </svg>
-                </router-link>
-            </div>
         </div>
 
         <div class="row mt-4">
@@ -73,35 +50,11 @@
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link active-class="active" to="/logs" class="nav-link d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                <path d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v2H0V2zm1 3h18v13a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5zm6 2v2h6V7H7z"></path>
-                            </svg>
-                            <span>Logs</span>
-                        </router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link active-class="active" to="/dumps" class="nav-link d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                <path d="M.7 9.3l4.8-4.8 1.4 1.42L2.84 10l4.07 4.07-1.41 1.42L0 10l.7-.7zm18.6 1.4l.7-.7-5.49-5.49-1.4 1.42L17.16 10l-4.07 4.07 1.41 1.42 4.78-4.78z"></path>
-                            </svg>
-                            <span>Dumps</span>
-                        </router-link>
-                    </li>
-                    <li class="nav-item">
                         <router-link active-class="active" to="/queries" class="nav-link d-flex align-items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                 <path d="M1 1h18v2H1V1zm0 8h18v2H1V9zm0 8h18v2H1v-2zM1 5h12v2H1V5zm0 8h12v2H1v-2z"></path>
                             </svg>
                             <span>Queries</span>
-                        </router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link active-class="active" to="/models" class="nav-link d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                <path d="M10 1l10 6-10 6L0 7l10-6zm6.67 10L20 13l-10 6-10-6 3.33-2L10 15l6.67-4z"></path>
-                            </svg>
-                            <span>Models</span>
                         </router-link>
                     </li>
                 </ul>
