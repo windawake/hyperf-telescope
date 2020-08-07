@@ -16,11 +16,8 @@ namespace Wind\Telescope\Listener;
 use Hyperf\Database\Events\QueryExecuted;
 use Hyperf\Event\Annotation\Listener;
 use Hyperf\Event\Contract\ListenerInterface;
-use Hyperf\Logger\LoggerFactory;
 use Hyperf\Utils\Arr;
 use Hyperf\Utils\Str;
-use Psr\Container\ContainerInterface;
-use Psr\Log\LoggerInterface;
 use Hyperf\Utils\Context;
 
 /**
@@ -52,11 +49,11 @@ class QueryListener implements ListenerInterface
             if (!strpos($sql, 'telescope')) {
                 // var_dump($sql);
 
-                $arr = Context::get('query_listener', []);
+                $arr = Context::get('query_record', []);
 
                 $arr[] = [$event, $sql];
 
-                Context::set('query_listener', $arr);
+                Context::set('query_record', $arr);
             }
         }
     }

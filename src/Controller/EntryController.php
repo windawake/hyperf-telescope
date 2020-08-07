@@ -61,9 +61,15 @@ abstract class EntryController
         if (!$this->request->has('before')) {
             return '';
         }
+        $before = $this->request->input('before');
+        $limit = $this->request->input('take', 50);
+        $query = TelescopeEntryModel::where('type', $this->entryType())->orderByDesc('sequence');
 
-        $limit = $this->request->input('take');
-        $entries = TelescopeEntryModel::where('type', $this->entryType())->orderByDesc('sequence')->limit($limit)->get()->toArray();
+        if ($before) {
+            $query->where('sequence', '<', $before);
+        }
+
+        $entries = $query->limit($limit)->get()->toArray();
 
         foreach ($entries as &$item) {
             if (isset($item['content']['response'])) {
@@ -81,10 +87,7 @@ abstract class EntryController
     public function show($id)
     {
         $entry = TelescopeEntryModel::find($id);
-        $entry->tags = [
-            "Auth:25",
-            "method:GET"
-        ];
+        $entry->tags = [];
         $batch = TelescopeEntryModel::where('batch_id', $entry->batch_id)->orderByDesc('sequence')->get();
 
         return $this->response->json([
