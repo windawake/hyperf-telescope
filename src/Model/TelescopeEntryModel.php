@@ -28,6 +28,7 @@ class TelescopeEntryModel extends Model
         'should_display_on_index',
         'type',
         'content',
+        'created_at',
     ];
 
     /**
