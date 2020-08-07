@@ -60,7 +60,7 @@ class IncomingEntry
     /**
      * The DateTime that indicates when the entry was recorded.
      *
-     * @var \DateTimeInterface
+     * @var string
      */
     public $recordedAt;
 
@@ -73,8 +73,9 @@ class IncomingEntry
     public function __construct(array $content)
     {
         $this->uuid = (string) Str::orderedUuid();
-
-        $this->recordedAt = Carbon::now('Asia/Shanghai')->toDateTimeString();
+        
+        $timezone = env('TELESCOPE_TIMEZONE') ?: date_default_timezone_get();
+        $this->recordedAt = Carbon::now()->setTimezone($timezone)->toDateTimeString();
 
         $this->content = array_merge($content, ['hostname' => gethostname()]);
 
