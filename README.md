@@ -31,7 +31,7 @@
 # 修改.env
 TELESCOPE_ENABLED=false #默认开启
 TELESCOPE_TIMEZONE=Asia/Shanghai #默认php时区
-TELESCOPE_QUERY_SLOW=50 #单位毫米
+TELESCOPE_QUERY_SLOW=50 #单位毫秒
 ```
 
 ## 效果图
