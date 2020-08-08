@@ -17,3 +17,5 @@
 ## 访问地址
 `http://127.0.0.1:9501/telescope/requests`
 
+## 效果图
+<img src="./preview01.jpg" width="90%">
