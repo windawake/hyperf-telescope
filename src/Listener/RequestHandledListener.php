@@ -23,8 +23,8 @@ use Wind\Telescope\Event\RequestHandled;
 use Hyperf\HttpServer\Router\Dispatched;
 use Wind\Telescope\EntryType;
 use Wind\Telescope\IncomingEntry;
-use Wind\Telescope\Model\TelescopeEntryModel;
 use Psr\Http\Message\ResponseInterface;
+
 
 /**
  * @Listener
@@ -74,12 +74,11 @@ class RequestHandledListener implements ListenerInterface
                 ]);
 
                 $batchId = $entry->uuid;
-                $entry->batchId($batchId)->type(EntryType::REQUEST);
-
-                TelescopeEntryModel::create($entry->toArray());
+                $entry->batchId($batchId)->type(EntryType::REQUEST)->user();
+                $entry->create();
 
                 $arr = Context::get('query_record', []);
-                $optionSlow = 500;
+                $optionSlow = env('TELESCOPE_QUERY_SLOW', 500);
                 foreach ($arr as [$event, $sql]) {
                     $entry = IncomingEntry::make([
                         'connection' => $event->connectionName,
@@ -92,9 +91,8 @@ class RequestHandledListener implements ListenerInterface
                         'hash' => md5($sql),
                     ]);
 
-                    $entry->batchId($batchId)->type(EntryType::QUERY);
-
-                    TelescopeEntryModel::create($entry->toArray());
+                    $entry->batchId($batchId)->type(EntryType::QUERY)->user();
+                    $entry->create();
                 }
 
                 $exception = Context::get('exception_record');
@@ -113,9 +111,8 @@ class RequestHandledListener implements ListenerInterface
                         'line_preview' => $this->getContext($exception),
                     ]);
 
-                    $entry->batchId($batchId)->type(EntryType::EXCEPTION);
-
-                    TelescopeEntryModel::create($entry->toArray());
+                    $entry->batchId($batchId)->type(EntryType::EXCEPTION)->user();
+                    $entry->create();
                 }
             }
         }

@@ -19,7 +19,7 @@ use Psr\Container\ContainerInterface;
 use Wind\Telescope\Model\TelescopeEntryModel;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\View\RenderInterface;
-
+use Wind\Telescope\Model\TelescopeEntryTagModel;
 
 abstract class EntryController
 {
@@ -63,10 +63,15 @@ abstract class EntryController
         }
         $before = $this->request->input('before');
         $limit = $this->request->input('take', 50);
+        $tag = $this->request->input('tag');
         $query = TelescopeEntryModel::where('type', $this->entryType())->orderByDesc('sequence');
 
         if ($before) {
             $query->where('sequence', '<', $before);
+        }
+
+        if ($tag) {
+            $query->join('telescope_entries_tags', 'telescope_entries_tags.entry_uuid', '=', 'telescope_entries.uuid')->where('tag', $tag);
         }
 
         $entries = $query->limit($limit)->get()->toArray();
@@ -87,7 +92,7 @@ abstract class EntryController
     public function show($id)
     {
         $entry = TelescopeEntryModel::find($id);
-        $entry->tags = [];
+        $entry->tags = TelescopeEntryTagModel::where('entry_uuid', $id)->pluck('tag')->toArray();
         $batch = TelescopeEntryModel::where('batch_id', $entry->batch_id)->orderByDesc('sequence')->get();
 
         return $this->response->json([

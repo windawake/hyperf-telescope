@@ -1,7 +1,7 @@
 {
     "name": "windawake/hyperf-telescope",
     "description": "An elegant debug assistant for the hyperf framework.",
-    "keywords": ["swoole", "hyperf", "monitoring", "debugging"],
+    "keywords": ["swoole", "hyperf", "debugging"],
     "license": "MIT",
     "authors": [
         {

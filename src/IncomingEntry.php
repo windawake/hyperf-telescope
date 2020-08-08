@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Wind\Telescope;
 
 use Carbon\Carbon;
+use Wind\Telescope\Model\TelescopeEntryModel;
+use Wind\Telescope\Model\TelescopeEntryTagModel;
 
 class IncomingEntry
 {
@@ -73,7 +75,7 @@ class IncomingEntry
     public function __construct(array $content)
     {
         $this->uuid = (string) Str::orderedUuid();
-        
+
         $timezone = env('TELESCOPE_TIMEZONE') ?: date_default_timezone_get();
         $this->recordedAt = Carbon::now()->setTimezone($timezone)->toDateTimeString();
 
@@ -116,6 +118,10 @@ class IncomingEntry
     {
         $this->type = $type;
 
+        if ($type == EntryType::QUERY && $this->content['slow']) {
+            $this->tags(['slow']);
+        }
+
         return $this;
     }
 
@@ -138,19 +144,27 @@ class IncomingEntry
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return $this
      */
-    public function user($user)
+    public function user($user = null)
     {
+        if (function_exists('auth')) {
+            $user = $user ?: auth()->user();
+        }
+
+        if (!is_null($user)) {
+            $this->content = array_merge($this->content, [
+                'user' => [
+                    'id' => $user->getKey(),
+                    'name' => $user->name ?? null,
+                    'email' => $user->email ?? null,
+                ],
+            ]);
+
+            $this->tags(['Auth:' . $user->getKey()]);
+        }
+
         $this->user = $user;
 
-        $this->content = array_merge($this->content, [
-            'user' => [
-                'id' => $user->getAuthIdentifier(),
-                'name' => $user->name ?? null,
-                'email' => $user->email ?? null,
-            ],
-        ]);
 
-        $this->tags(['Auth:' . $user->getAuthIdentifier()]);
 
         return $this;
     }
@@ -279,5 +293,17 @@ class IncomingEntry
             'content' => $this->content,
             'created_at' => $this->recordedAt,
         ];
+    }
+
+    public function create()
+    {
+        foreach ($this->tags as $tag) {
+            $tagItem = [
+                'entry_uuid' => $this->uuid,
+                'tag' => $tag
+            ];
+            TelescopeEntryTagModel::create($tagItem);
+        }
+        TelescopeEntryModel::create($this->toArray());
     }
 }
