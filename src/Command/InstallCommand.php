@@ -39,12 +39,20 @@ class InstallCommand extends Command
 
         $input = new ArrayInput(['command' => 'vendor:publish', 'package' => 'windawake/hyperf-telescope']);
         $exitCode = $application->run($input, $output);
-        // var_dump($output);
+        if(!$exitCode) {
+            $this->info('publish successfully');
+        }else{
+            $this->error('publish failed');
+        }
+        
 
         $input = new ArrayInput(['command' => 'migrate']);
         $exitCode = $application->run($input, $output);
-        // var_dump($output);
-        // var_dump($output, $exitCode);
+        if(!$exitCode) {
+            $this->info('migrate successfully');
+        }else{
+            $this->error('migrate failed');
+        }
 
     }
 }
