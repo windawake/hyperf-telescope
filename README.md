@@ -2,6 +2,8 @@
 
 参考laravel telescope的代码开发出来的适用了hyperf的调试工具
 
+`composer require windawake/hyperf-telescope`
+
 ## 一键安装telescope
 `php ./bin/hyperf.php telescope:install`
 
