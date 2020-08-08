@@ -23,9 +23,12 @@ use Swoole\Http\Response as SwooleResponse;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Throwable;
 use Wind\Telescope\Event\RequestHandled;
+use Hyperf\Database\Schema\Schema;
+use Hyperf\Contract\StdoutLoggerInterface;
 
 class Server extends \Hyperf\HttpServer\Server
 {
+    public static $telescopeEmitter = null;
     public function onRequest(SwooleRequest $request, SwooleResponse $response): void
     {
         Context::set('start_time', microtime(true));
@@ -57,8 +60,21 @@ class Server extends \Hyperf\HttpServer\Server
             } else {
                 $this->responseEmitter->emit($psr7Response, $response, true);
 
-                $eventDispatcher = $this->container->get(EventDispatcherInterface::class);
-                $eventDispatcher->dispatch(new RequestHandled($psr7Request, $psr7Response, $middlewares));
+                if (is_null(self::$telescopeEmitter)){
+                    if (Schema::hasTable('telescope_entries')) {
+                        self::$telescopeEmitter = true;
+                    }else{
+                        self::$telescopeEmitter = false;
+                        $stdout = $this->container->get(StdoutLoggerInterface::class);
+                        $stdout->warning("if you want to use telescope. Please enter command to install: php ./bin/hyperf.php telescope:install");
+                    }
+                }
+
+                if(self::$telescopeEmitter){
+                    $eventDispatcher = $this->container->get(EventDispatcherInterface::class);
+                    $eventDispatcher->dispatch(new RequestHandled($psr7Request, $psr7Response, $middlewares));
+                }
+                
             }
         }
     }

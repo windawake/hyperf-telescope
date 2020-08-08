@@ -54,15 +54,15 @@ class RequestHandledListener implements ListenerInterface
             $middlewares = $event->middlewares;
             $startTime = Context::get('start_time');
 
-            /** @var Dispatched $dispatched */
-            $dispatched = $psr7Request->getAttribute(Dispatched::class);
+            if ($this->incomingRequest($psr7Request)) {
+                /** @var Dispatched $dispatched */
+                $dispatched = $psr7Request->getAttribute(Dispatched::class);
 
-            if (strpos($psr7Request->getRequestTarget(), 'telescope') === false) {
                 $entry = IncomingEntry::make([
                     'ip_address' => $psr7Request->getServerParams()['remote_addr'],
                     'uri' => $psr7Request->getRequestTarget(),
                     'method' => $psr7Request->getMethod(),
-                    'controller_action' => $dispatched->handler->callback,
+                    'controller_action' => $dispatched->handler ? $dispatched->handler->callback : '',
                     'middleware' => $middlewares,
                     'headers' => $psr7Request->getHeaders(),
                     'payload' => $psr7Request->getParsedBody(),
@@ -116,6 +116,20 @@ class RequestHandledListener implements ListenerInterface
                 }
             }
         }
+    }
+
+    protected function incomingRequest($psr7Request)
+    {
+        $target = $psr7Request->getRequestTarget();
+        if (strpos($target, '.ico')) {
+            return false;
+        }
+
+        if (strpos($target, 'telescope') !== false) {
+            return false;
+        }
+
+        return true;
     }
 
     protected function response(ResponseInterface $response)
