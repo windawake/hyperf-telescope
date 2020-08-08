@@ -1,3 +1,5 @@
+### Get Started
+
 ## 一键安装telescope
 `php ./bin/hyperf.php telescope:install`
 
@@ -14,3 +16,4 @@
 
 ## 访问地址
 `http://127.0.0.1:9501/telescope/requests`
+
