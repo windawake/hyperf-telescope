@@ -52,7 +52,7 @@ class ConfigProvider
             'exceptions' => [
                 'handler' => [
                     'http' => [
-                        \Wind\Telescope\Listener\ErrorRecord::class,
+                        \Wind\Telescope\Exception\ErrorRecord::class,
                     ]
                 ]
             ],
