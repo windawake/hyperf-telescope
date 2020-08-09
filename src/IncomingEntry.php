@@ -146,7 +146,7 @@ class IncomingEntry
      */
     public function user($user = null)
     {
-        if (function_exists('auth')) {
+        if (function_exists('auth') && auth()->parseToken()) {
             $user = $user ?: auth()->user();
         }
 
