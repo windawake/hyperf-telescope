@@ -22,6 +22,7 @@ class ConfigProvider
         return [
             'dependencies' => [
                 \Hyperf\HttpServer\Server::class => \Wind\Telescope\Core\Server::class,
+                \Hyperf\JsonRpc\TcpServer::class => \Wind\Telescope\Core\RpcServer::class,
             ],
             'commands' => [
                 \Wind\Telescope\Command\ClearCommand::class,
