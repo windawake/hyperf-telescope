@@ -36,5 +36,8 @@ TELESCOPE_TIMEZONE=Asia/Shanghai #默认php时区
 TELESCOPE_QUERY_SLOW=50 #单位毫秒
 ```
 
+### 温馨提示
+因为修改了内核代码，不能应用线上环境
+
 ## 效果图
 <img src="./preview01.jpg" width="90%">
