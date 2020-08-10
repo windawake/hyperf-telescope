@@ -54,6 +54,9 @@ class ConfigProvider
                 'handler' => [
                     'http' => [
                         \Wind\Telescope\Exception\ErrorRecord::class,
+                    ],
+                    'jsonrpc' => [
+                        \Wind\Telescope\Exception\RpcErrorRecord::class,
                     ]
                 ]
             ],

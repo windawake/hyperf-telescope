@@ -22,5 +22,5 @@ class EntryType
     public const SCHEDULED_TASK = 'schedule';
     public const GATE = 'gate';
     public const VIEW = 'view';
-    public const RPC = 'rpc';
+    public const SERVICE = 'service';
 }

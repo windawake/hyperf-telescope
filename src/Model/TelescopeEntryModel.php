@@ -24,6 +24,7 @@ class TelescopeEntryModel extends Model
         'sequence',
         'uuid',
         'batch_id',
+        'sub_batch_id',
         'family_hash',
         'should_display_on_index',
         'type',

@@ -25,6 +25,13 @@ class IncomingEntry
     public $batchId;
 
     /**
+     * The entry's sub batch ID.
+     *
+     * @var string
+     */
+    public $subBatchId;
+
+    /**
      * The entry's type.
      *
      * @var string
@@ -109,6 +116,19 @@ class IncomingEntry
     }
 
     /**
+     * Assign the entry a given sub batch ID.
+     *
+     * @param  string  $batchId
+     * @return $this
+     */
+    public function subBatchId(string $batchId)
+    {
+        $this->subBatchId = $batchId;
+
+        return $this;
+    }
+
+    /**
      * Assign the entry a given type.
      *
      * @param  string  $type
@@ -146,9 +166,16 @@ class IncomingEntry
      */
     public function user($user = null)
     {
-        if (function_exists('auth') && auth()->parseToken()) {
-            $user = $user ?: auth()->user();
+        $authUser = null;
+        if (function_exists('auth')) {
+            $token = auth()->parseToken();
+
+            if ($token && auth()->check($token)) {
+                $authUser = auth()->user();
+            }
         }
+
+        $user = $user ?: $authUser;
 
         if (!is_null($user)) {
             $this->content = array_merge($this->content, [
@@ -288,6 +315,7 @@ class IncomingEntry
         return [
             'uuid' => $this->uuid,
             'batch_id' => $this->batchId,
+            'sub_batch_id' => $this->subBatchId,
             'family_hash' => $this->familyHash,
             'type' => $this->type,
             'content' => $this->content,

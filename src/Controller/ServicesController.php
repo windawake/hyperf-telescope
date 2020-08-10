@@ -20,7 +20,7 @@ use Hyperf\HttpServer\Annotation\PostMapping;
 /**
  * @Controller()
  */
-class RpcController extends EntryController
+class ServicesController extends EntryController
 {
 
     /**
@@ -30,7 +30,7 @@ class RpcController extends EntryController
      */
     protected function entryType()
     {
-        return EntryType::RPC;
+        return EntryType::SERVICE;
     }
 
     /**
@@ -45,7 +45,7 @@ class RpcController extends EntryController
     }
 
     /**
-     * @PostMapping(path="/telescope/telescope-api/rpc")
+     * @PostMapping(path="/telescope/telescope-api/services")
      */
     public function list()
     {
@@ -53,7 +53,7 @@ class RpcController extends EntryController
     }
 
     /**
-     * @GetMapping(path="/telescope/telescope-api/rpc/{id}")
+     * @GetMapping(path="/telescope/telescope-api/services/{id}")
      */
     public function detail($id)
     {

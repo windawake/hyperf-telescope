@@ -36,13 +36,16 @@ use Swoole\Server as SwooleServer;
 use Throwable;
 use Wind\Telescope\Event\RpcHandled;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Wind\Telescope\Str;
 
 class RpcServer extends \Hyperf\JsonRpc\TcpServer
 {
-    
+
     public function onReceive($server, int $fd, int $fromId, string $data): void
     {
         Context::set('start_time', microtime(true));
+        $batchId = Str::orderedUuid();
+        Context::set('sub_batch_id', $batchId);
         try {
             CoordinatorManager::until(Constants::WORKER_START)->yield();
 
@@ -61,7 +64,7 @@ class RpcServer extends \Hyperf\JsonRpc\TcpServer
             $exceptionHandlerDispatcher = $this->container->get(ExceptionHandlerDispatcher::class);
             $response = $exceptionHandlerDispatcher->dispatch($throwable, $this->exceptionHandlers);
         } finally {
-            if (! $response || ! $response instanceof ResponseInterface) {
+            if (!$response || !$response instanceof ResponseInterface) {
                 $response = $this->transferToResponse($response);
             }
             if ($response) {
@@ -70,10 +73,6 @@ class RpcServer extends \Hyperf\JsonRpc\TcpServer
 
             $eventDispatcher = $this->container->get(EventDispatcherInterface::class);
             $eventDispatcher->dispatch(new RpcHandled($request, $response, $middlewares));
-
         }
     }
-
-    
 }
-

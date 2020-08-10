@@ -63,7 +63,7 @@ class RpcHandledListener implements ListenerInterface
                     'ip_address' => '',
                     'uri' => $psr7Request->getRequestTarget(),
                     'method' => $psr7Request->getMethod(),
-                    'controller_action' => $dispatched->handler ? $dispatched->handler->callback : '',
+                    'controller_action' => $dispatched->handler ? implode('@',$dispatched->handler->callback) : '',
                     'middleware' => $middlewares,
                     'headers' => $psr7Request->getHeaders(),
                     'payload' => $psr7Request->getParsedBody(),
@@ -75,7 +75,8 @@ class RpcHandledListener implements ListenerInterface
                 ]);
 
                 $batchId = $rpcData['context']['batch_id'];
-                $entry->batchId($batchId)->type(EntryType::RPC)->user();
+                $subBatchId = Context::get('sub_batch_id');
+                $entry->batchId($batchId)->subBatchId($subBatchId)->type(EntryType::SERVICE)->user();
                 $entry->create();
 
                 $arr = Context::get('query_record', []);
@@ -92,7 +93,7 @@ class RpcHandledListener implements ListenerInterface
                         'hash' => md5($sql),
                     ]);
 
-                    $entry->batchId($batchId)->type(EntryType::QUERY)->user();
+                    $entry->batchId($batchId)->subBatchId($subBatchId)->type(EntryType::QUERY)->user();
                     $entry->create();
                 }
 
@@ -112,7 +113,7 @@ class RpcHandledListener implements ListenerInterface
                         'line_preview' => $this->getContext($exception),
                     ]);
 
-                    $entry->batchId($batchId)->type(EntryType::EXCEPTION)->user();
+                    $entry->batchId($batchId)->subBatchId($subBatchId)->type(EntryType::EXCEPTION)->user();
                     $entry->create();
                 }
             }

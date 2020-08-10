@@ -17,6 +17,7 @@ class TelescopeEntries extends Migration
             $table->bigIncrements('sequence');
             $table->uuid('uuid');
             $table->uuid('batch_id');
+            $table->uuid('sub_batch_id')->nullable();
             $table->string('family_hash')->nullable();
             $table->boolean('should_display_on_index')->default(true);
             $table->string('type', 20);
@@ -25,6 +26,7 @@ class TelescopeEntries extends Migration
 
             $table->unique('uuid');
             $table->index('batch_id');
+            $table->index('sub_batch_id');
             $table->index('family_hash');
             $table->index('created_at');
             $table->index(['type', 'should_display_on_index']);
