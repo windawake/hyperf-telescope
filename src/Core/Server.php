@@ -25,13 +25,18 @@ use Throwable;
 use Wind\Telescope\Event\RequestHandled;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\Contract\StdoutLoggerInterface;
+use Hyperf\Rpc\Context as RpcContext;
+use Wind\Telescope\Str;
 
 class Server extends \Hyperf\HttpServer\Server
 {
     public static $telescopeEmitter = null;
     public function onRequest(SwooleRequest $request, SwooleResponse $response): void
     {
-        Context::set('start_time', microtime(true));
+        $batchId = Str::orderedUuid();
+        Context::set('batch_id', $batchId);
+        (new RpcContext)->set('batch_id', $batchId);
+        
         try {
             CoordinatorManager::until(Constants::WORKER_START)->yield();
 

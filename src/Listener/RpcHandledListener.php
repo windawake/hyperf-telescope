@@ -19,7 +19,7 @@ use Hyperf\Event\Contract\ListenerInterface;
 use Hyperf\Utils\Arr;
 use Hyperf\Utils\Str;
 use Hyperf\Utils\Context;
-use Wind\Telescope\Event\RequestHandled;
+use Wind\Telescope\Event\RpcHandled;
 use Hyperf\HttpServer\Router\Dispatched;
 use Wind\Telescope\EntryType;
 use Wind\Telescope\IncomingEntry;
@@ -29,13 +29,13 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * @Listener
  */
-class RequestHandledListener implements ListenerInterface
+class RpcHandledListener implements ListenerInterface
 {
 
     public function listen(): array
     {
         return [
-            RequestHandled::class,
+            RpcHandled::class,
         ];
     }
 
@@ -44,7 +44,7 @@ class RequestHandledListener implements ListenerInterface
      */
     public function process(object $event)
     {
-        if ($event instanceof RequestHandled) {
+        if ($event instanceof RpcHandled) {
 
             /**
              * @var \Hyperf\HttpMessage\Server\Request $psr7Request 
@@ -52,17 +52,18 @@ class RequestHandledListener implements ListenerInterface
             $psr7Request = $event->request;
             $psr7Response = $event->response;
             $middlewares = $event->middlewares;
-            $startTime = $psr7Request->getServerParams()['request_time'];
+            $startTime = Context::get('start_time');
+            $rpcData = $psr7Request->getAttribute('data');
 
             if ($this->incomingRequest($psr7Request)) {
                 /** @var Dispatched $dispatched */
                 $dispatched = $psr7Request->getAttribute(Dispatched::class);
 
                 $entry = IncomingEntry::make([
-                    'ip_address' => $psr7Request->getServerParams()['remote_addr'],
+                    'ip_address' => '',
                     'uri' => $psr7Request->getRequestTarget(),
                     'method' => $psr7Request->getMethod(),
-                    'controller_action' => $dispatched->handler ? $dispatched->handler->callback : '',
+                    'controller_action' => $dispatched->handler ? implode('@',$dispatched->handler->callback) : '',
                     'middleware' => $middlewares,
                     'headers' => $psr7Request->getHeaders(),
                     'payload' => $psr7Request->getParsedBody(),
@@ -73,8 +74,9 @@ class RequestHandledListener implements ListenerInterface
                     'memory' => round(memory_get_peak_usage(true) / 1024 / 1025, 1),
                 ]);
 
-                $batchId = Context::get('batch_id');
-                $entry->batchId($batchId)->type(EntryType::REQUEST)->user();
+                $batchId = $rpcData['context']['batch_id'];
+                $subBatchId = Context::get('sub_batch_id');
+                $entry->batchId($batchId)->subBatchId($subBatchId)->type(EntryType::SERVICE)->user();
                 $entry->create();
 
                 $arr = Context::get('query_record', []);
@@ -91,7 +93,7 @@ class RequestHandledListener implements ListenerInterface
                         'hash' => md5($sql),
                     ]);
 
-                    $entry->batchId($batchId)->type(EntryType::QUERY)->user();
+                    $entry->batchId($batchId)->subBatchId($subBatchId)->type(EntryType::QUERY)->user();
                     $entry->create();
                 }
 
@@ -111,7 +113,7 @@ class RequestHandledListener implements ListenerInterface
                         'line_preview' => $this->getContext($exception),
                     ]);
 
-                    $entry->batchId($batchId)->type(EntryType::EXCEPTION)->user();
+                    $entry->batchId($batchId)->subBatchId($subBatchId)->type(EntryType::EXCEPTION)->user();
                     $entry->create();
                 }
             }
