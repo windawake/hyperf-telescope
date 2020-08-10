@@ -1,7 +1,14 @@
 <?php
 
 declare(strict_types=1);
-
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://doc.hyperf.io
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace Wind\Telescope;
 
 use Carbon\Carbon;
@@ -41,7 +48,7 @@ class IncomingEntry
     /**
      * The entry's family hash.
      *
-     * @var string|null
+     * @var null|string
      */
     public $familyHash;
 
@@ -75,9 +82,6 @@ class IncomingEntry
 
     /**
      * Create a new incoming entry instance.
-     *
-     * @param  array  $content
-     * @return void
      */
     public function __construct(array $content)
     {
@@ -94,7 +98,7 @@ class IncomingEntry
     /**
      * Create a new entry instance.
      *
-     * @param  mixed  ...$arguments
+     * @param mixed ...$arguments
      * @return static
      */
     public static function make(...$arguments)
@@ -105,7 +109,6 @@ class IncomingEntry
     /**
      * Assign the entry a given batch ID.
      *
-     * @param  string  $batchId
      * @return $this
      */
     public function batchId(string $batchId)
@@ -118,7 +121,6 @@ class IncomingEntry
     /**
      * Assign the entry a given sub batch ID.
      *
-     * @param  string  $batchId
      * @return $this
      */
     public function subBatchId(string $batchId)
@@ -131,7 +133,6 @@ class IncomingEntry
     /**
      * Assign the entry a given type.
      *
-     * @param  string  $type
      * @return $this
      */
     public function type(string $type)
@@ -148,7 +149,6 @@ class IncomingEntry
     /**
      * Assign the entry a family hash.
      *
-     * @param  string  $familyHash
      * @return $this
      */
     public function withFamilyHash(string $familyHash)
@@ -161,7 +161,7 @@ class IncomingEntry
     /**
      * Set the currently authenticated user.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param \Illuminate\Contracts\Auth\Authenticatable $user
      * @return $this
      */
     public function user($user = null)
@@ -177,7 +177,7 @@ class IncomingEntry
 
         $user = $user ?: $authUser;
 
-        if (!is_null($user)) {
+        if (! is_null($user)) {
             $this->content = array_merge($this->content, [
                 'user' => [
                     'id' => $user->getKey(),
@@ -191,15 +191,12 @@ class IncomingEntry
 
         $this->user = $user;
 
-
-
         return $this;
     }
 
     /**
      * Merge tags into the entry's existing tags.
      *
-     * @param  array  $tags
      * @return $this
      */
     public function tags(array $tags)
@@ -298,7 +295,7 @@ class IncomingEntry
     /**
      * Get the family look-up hash for the incoming entry.
      *
-     * @return string|null
+     * @return null|string
      */
     public function familyHash()
     {
@@ -328,7 +325,7 @@ class IncomingEntry
         foreach ($this->tags as $tag) {
             $tagItem = [
                 'entry_uuid' => $this->uuid,
-                'tag' => $tag
+                'tag' => $tag,
             ];
             TelescopeEntryTagModel::create($tagItem);
         }

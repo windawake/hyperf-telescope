@@ -9,35 +9,18 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 namespace Wind\Telescope\Controller;
 
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Psr\Container\ContainerInterface;
-
-use Wind\Telescope\Model\TelescopeEntryModel;
-use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\View\RenderInterface;
 use Wind\Telescope\EntryType;
+use Wind\Telescope\Model\TelescopeEntryModel;
 use Wind\Telescope\Model\TelescopeEntryTagModel;
 
 abstract class EntryController
 {
-    /**
-     * The entry type for the controller.
-     *
-     * @return string
-     */
-    abstract protected function entryType();
-
-    /**
-     * The watcher class for the controller.
-     *
-     * @return string
-     */
-    abstract protected function watcher();
-
     /**
      * @Inject
      * @var ContainerInterface
@@ -56,10 +39,9 @@ abstract class EntryController
      */
     protected $response;
 
-
     public function index()
     {
-        if (!$this->request->has('before')) {
+        if (! $this->request->has('before')) {
             return '';
         }
         $before = $this->request->input('before');
@@ -89,7 +71,6 @@ abstract class EntryController
         ]);
     }
 
-
     public function show($id)
     {
         $entry = TelescopeEntryModel::find($id);
@@ -107,6 +88,20 @@ abstract class EntryController
             'batch' => $batch,
         ]);
     }
+
+    /**
+     * The entry type for the controller.
+     *
+     * @return string
+     */
+    abstract protected function entryType();
+
+    /**
+     * The watcher class for the controller.
+     *
+     * @return string
+     */
+    abstract protected function watcher();
 
     /**
      * Determine the watcher recording status.

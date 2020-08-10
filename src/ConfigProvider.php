@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 namespace Wind\Telescope;
 
 class ConfigProvider
@@ -57,8 +56,8 @@ class ConfigProvider
                     ],
                     'jsonrpc' => [
                         \Wind\Telescope\Exception\RpcErrorRecord::class,
-                    ]
-                ]
+                    ],
+                ],
             ],
             'publish' => [
                 [

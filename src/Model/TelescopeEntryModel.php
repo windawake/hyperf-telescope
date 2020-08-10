@@ -1,13 +1,33 @@
 <?php
 
 declare(strict_types=1);
-
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://doc.hyperf.io
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace Wind\Telescope\Model;
 
 use Hyperf\DbConnection\Model\Model;
 
 class TelescopeEntryModel extends Model
 {
+    /**
+     * The name of the "updated at" column.
+     *
+     * @var string
+     */
+    const UPDATED_AT = null;
+
+    /**
+     * Prevent Eloquent from overriding uuid with `lastInsertId`.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
 
     /**
      * The table associated with the model.
@@ -15,6 +35,7 @@ class TelescopeEntryModel extends Model
      * @var string
      */
     protected $table = 'telescope_entries';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -31,13 +52,6 @@ class TelescopeEntryModel extends Model
         'content',
         'created_at',
     ];
-
-    /**
-     * The name of the "updated at" column.
-     *
-     * @var string
-     */
-    const UPDATED_AT = null;
 
     /**
      * The attributes that should be cast to native types.
@@ -61,13 +75,6 @@ class TelescopeEntryModel extends Model
      * @var string
      */
     protected $keyType = 'string';
-
-    /**
-     * Prevent Eloquent from overriding uuid with `lastInsertId`.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
 
     protected $appends = ['id'];
 

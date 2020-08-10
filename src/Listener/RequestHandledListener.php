@@ -6,32 +6,27 @@ declare(strict_types=1);
  *
  * @link     https://www.hyperf.io
  * @document https://doc.hyperf.io
- * 
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 namespace Wind\Telescope\Listener;
 
 use Hyperf\Database\Events\QueryExecuted;
 use Hyperf\Event\Annotation\Listener;
 use Hyperf\Event\Contract\ListenerInterface;
-use Hyperf\Utils\Arr;
-use Hyperf\Utils\Str;
-use Hyperf\Utils\Context;
-use Wind\Telescope\Event\RequestHandled;
 use Hyperf\HttpServer\Router\Dispatched;
-use Wind\Telescope\EntryType;
-use Wind\Telescope\IncomingEntry;
+use Hyperf\Utils\Arr;
+use Hyperf\Utils\Context;
 use Psr\Http\Message\ResponseInterface;
-
+use Wind\Telescope\EntryType;
+use Wind\Telescope\Event\RequestHandled;
+use Wind\Telescope\IncomingEntry;
 
 /**
  * @Listener
  */
 class RequestHandledListener implements ListenerInterface
 {
-
     public function listen(): array
     {
         return [
@@ -45,9 +40,8 @@ class RequestHandledListener implements ListenerInterface
     public function process(object $event)
     {
         if ($event instanceof RequestHandled) {
-
             /**
-             * @var \Hyperf\HttpMessage\Server\Request $psr7Request 
+             * @var \Hyperf\HttpMessage\Server\Request $psr7Request
              */
             $psr7Request = $event->request;
             $psr7Response = $event->response;
@@ -135,8 +129,8 @@ class RequestHandledListener implements ListenerInterface
     protected function response(ResponseInterface $response)
     {
         $content = $response->getBody()->getContents();
-        if (!$this->contentWithinLimits($content)) {
-            return "Purged By Telescope";
+        if (! $this->contentWithinLimits($content)) {
+            return 'Purged By Telescope';
         }
 
         if (is_string($content) && strpos($response->getContentType(), 'application/json') !== false) {

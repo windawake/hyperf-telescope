@@ -9,38 +9,21 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 namespace Wind\Telescope\Core;
 
-use Hyperf\Contract\ConfigInterface;
-use Hyperf\Contract\DispatcherInterface;
-use Hyperf\Contract\MiddlewareInitializerInterface;
-use Hyperf\Contract\OnReceiveInterface;
 use Hyperf\ExceptionHandler\ExceptionHandlerDispatcher;
-use Hyperf\HttpMessage\Stream\SwooleStream;
-use Hyperf\HttpServer\Contract\CoreMiddlewareInterface;
-use Hyperf\HttpServer\Exception\Handler\HttpExceptionHandler;
-use Hyperf\Rpc\Context as RpcContext;
-use Hyperf\Rpc\Protocol;
-use Hyperf\Server\ServerManager;
-use Hyperf\Utils\Arr;
 use Hyperf\Utils\Context;
 use Hyperf\Utils\Coordinator\Constants;
 use Hyperf\Utils\Coordinator\CoordinatorManager;
-use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
-use Swoole\Coroutine\Server\Connection;
-use Swoole\Server as SwooleServer;
 use Throwable;
 use Wind\Telescope\Event\RpcHandled;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Wind\Telescope\Str;
 
 class RpcServer extends \Hyperf\JsonRpc\TcpServer
 {
-
     public function onReceive($server, int $fd, int $fromId, string $data): void
     {
         Context::set('start_time', microtime(true));
@@ -64,7 +47,7 @@ class RpcServer extends \Hyperf\JsonRpc\TcpServer
             $exceptionHandlerDispatcher = $this->container->get(ExceptionHandlerDispatcher::class);
             $response = $exceptionHandlerDispatcher->dispatch($throwable, $this->exceptionHandlers);
         } finally {
-            if (!$response || !$response instanceof ResponseInterface) {
+            if (! $response || ! $response instanceof ResponseInterface) {
                 $response = $this->transferToResponse($response);
             }
             if ($response) {

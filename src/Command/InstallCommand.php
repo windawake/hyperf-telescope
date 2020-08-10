@@ -5,11 +5,10 @@ declare(strict_types=1);
  * This file is part of Hyperf.
  *
  * @link     https://www.hyperf.io
- * @document https://hyperf.wiki
+ * @document https://doc.hyperf.io
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 namespace Wind\Telescope\Command;
 
 use Hyperf\Command\Command;
@@ -36,23 +35,20 @@ class InstallCommand extends Command
 
         $output = new NullOutput();
 
-
         $input = new ArrayInput(['command' => 'vendor:publish', 'package' => 'windawake/hyperf-telescope']);
         $exitCode = $application->run($input, $output);
-        if(!$exitCode) {
+        if (! $exitCode) {
             $this->info('publish successfully');
-        }else{
+        } else {
             $this->error('publish failed');
         }
-        
 
         $input = new ArrayInput(['command' => 'migrate']);
         $exitCode = $application->run($input, $output);
-        if(!$exitCode) {
+        if (! $exitCode) {
             $this->info('migrate successfully');
-        }else{
+        } else {
             $this->error('migrate failed');
         }
-
     }
 }

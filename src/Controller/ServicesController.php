@@ -9,19 +9,34 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 namespace Wind\Telescope\Controller;
 
-use Wind\Telescope\EntryType;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
+use Wind\Telescope\EntryType;
 
 /**
- * @Controller()
+ * @Controller
  */
 class ServicesController extends EntryController
 {
+    /**
+     * @PostMapping(path="/telescope/telescope-api/services")
+     */
+    public function list()
+    {
+        return $this->index();
+    }
+
+    /**
+     * @GetMapping(path="/telescope/telescope-api/services/{id}")
+     * @param mixed $id
+     */
+    public function detail($id)
+    {
+        return $this->show($id);
+    }
 
     /**
      * The entry type for the controller.
@@ -42,21 +57,5 @@ class ServicesController extends EntryController
     {
         // return RequestWatcher::class;
         return null;
-    }
-
-    /**
-     * @PostMapping(path="/telescope/telescope-api/services")
-     */
-    public function list()
-    {
-        return $this->index();
-    }
-
-    /**
-     * @GetMapping(path="/telescope/telescope-api/services/{id}")
-     */
-    public function detail($id)
-    {
-        return $this->show($id);
     }
 }

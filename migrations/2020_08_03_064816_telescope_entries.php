@@ -1,18 +1,25 @@
 <?php
 
-use Hyperf\Database\Schema\Schema;
-use Hyperf\Database\Schema\Blueprint;
+declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://doc.hyperf.io
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 use Hyperf\Database\Migrations\Migration;
+use Hyperf\Database\Schema\Blueprint;
+use Hyperf\Database\Schema\Schema;
 
 class TelescopeEntries extends Migration
 {
-
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        //
         Schema::create('telescope_entries', function (Blueprint $table) {
             $table->bigIncrements('sequence');
             $table->uuid('uuid');
@@ -50,7 +57,6 @@ class TelescopeEntries extends Migration
      */
     public function down(): void
     {
-        //
         Schema::dropIfExists('telescope_entries_tags');
         Schema::dropIfExists('telescope_entries');
         Schema::dropIfExists('telescope_monitoring');

@@ -9,14 +9,12 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 namespace Wind\Telescope\Exception;
 
-use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Hyperf\HttpMessage\Stream\SwooleStream;
-use Psr\Http\Message\ResponseInterface;
 use Hyperf\Utils\Context;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 class RpcErrorRecord extends ExceptionHandler

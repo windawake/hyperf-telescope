@@ -6,32 +6,27 @@ declare(strict_types=1);
  *
  * @link     https://www.hyperf.io
  * @document https://doc.hyperf.io
- * 
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 namespace Wind\Telescope\Listener;
 
 use Hyperf\Database\Events\QueryExecuted;
 use Hyperf\Event\Annotation\Listener;
 use Hyperf\Event\Contract\ListenerInterface;
-use Hyperf\Utils\Arr;
-use Hyperf\Utils\Str;
-use Hyperf\Utils\Context;
-use Wind\Telescope\Event\RpcHandled;
 use Hyperf\HttpServer\Router\Dispatched;
-use Wind\Telescope\EntryType;
-use Wind\Telescope\IncomingEntry;
+use Hyperf\Utils\Arr;
+use Hyperf\Utils\Context;
 use Psr\Http\Message\ResponseInterface;
-
+use Wind\Telescope\EntryType;
+use Wind\Telescope\Event\RpcHandled;
+use Wind\Telescope\IncomingEntry;
 
 /**
  * @Listener
  */
 class RpcHandledListener implements ListenerInterface
 {
-
     public function listen(): array
     {
         return [
@@ -45,9 +40,8 @@ class RpcHandledListener implements ListenerInterface
     public function process(object $event)
     {
         if ($event instanceof RpcHandled) {
-
             /**
-             * @var \Hyperf\HttpMessage\Server\Request $psr7Request 
+             * @var \Hyperf\HttpMessage\Server\Request $psr7Request
              */
             $psr7Request = $event->request;
             $psr7Response = $event->response;
@@ -63,7 +57,7 @@ class RpcHandledListener implements ListenerInterface
                     'ip_address' => '',
                     'uri' => $psr7Request->getRequestTarget(),
                     'method' => $psr7Request->getMethod(),
-                    'controller_action' => $dispatched->handler ? implode('@',$dispatched->handler->callback) : '',
+                    'controller_action' => $dispatched->handler ? implode('@', $dispatched->handler->callback) : '',
                     'middleware' => $middlewares,
                     'headers' => $psr7Request->getHeaders(),
                     'payload' => $psr7Request->getParsedBody(),
@@ -137,8 +131,8 @@ class RpcHandledListener implements ListenerInterface
     protected function response(ResponseInterface $response)
     {
         $content = $response->getBody()->getContents();
-        if (!$this->contentWithinLimits($content)) {
-            return "Purged By Telescope";
+        if (! $this->contentWithinLimits($content)) {
+            return 'Purged By Telescope';
         }
 
         if (is_string($content) && strpos($response->getContentType(), 'application/json') !== false) {

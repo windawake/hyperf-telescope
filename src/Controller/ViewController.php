@@ -9,19 +9,17 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 namespace Wind\Telescope\Controller;
 
-use Hyperf\View\RenderInterface;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
+use Hyperf\View\RenderInterface;
 
 /**
- * @Controller()
+ * @Controller
  */
 class ViewController
 {
-
     /**
      * @GetMapping(path="/telescope/{view}")
      */
