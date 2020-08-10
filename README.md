@@ -26,7 +26,7 @@
 - [x] 记录request请求
 - [x] 记录异常错误
 - [x] 记录sql语句
-- [x] 记录rpc请求
+- [x] 记录rpc请求，默认支持jsonrpc，其它需要修改代码
 
 ### 提供配置项
 ```
@@ -35,6 +35,9 @@ TELESCOPE_ENABLED=false #默认开启
 TELESCOPE_TIMEZONE=Asia/Shanghai #默认php时区
 TELESCOPE_QUERY_SLOW=50 #单位毫秒
 ```
+
+### 温馨提示
+因为修改了内核代码，不能应用线上环境
 
 ## 效果图
 <img src="./preview01.jpg" width="90%">
