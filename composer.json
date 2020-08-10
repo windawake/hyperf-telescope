@@ -1,7 +1,11 @@
 {
     "name": "windawake/hyperf-telescope",
     "description": "An elegant debug assistant for the hyperf framework.",
-    "keywords": ["swoole", "hyperf", "debugging"],
+    "keywords": [
+        "swoole",
+        "hyperf",
+        "debugging"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -14,7 +18,10 @@
         "ext-swoole": ">=4.5",
         "hyperf/framework": "2.0.*",
         "hyperf/di": "2.0.*",
-        "hyperf/view": "2.0.*"
+        "hyperf/view": "2.0.*",
+        "hyperf/json-rpc": "2.0.*",
+        "hyperf/rpc-server": "2.0.*",
+        "hyperf/rpc-client": "2.0.*"
     },
     "autoload": {
         "psr-4": {
