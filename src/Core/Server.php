@@ -34,7 +34,9 @@ class Server extends \Hyperf\HttpServer\Server
     {
         $batchId = Str::orderedUuid();
         Context::set('batch_id', $batchId);
-        (new RpcContext())->set('batch_id', $batchId);
+        if (class_exists(RpcContext::class)) {
+            (new RpcContext())->set('batch_id', $batchId);
+        }
 
         try {
             CoordinatorManager::until(Constants::WORKER_START)->yield();

@@ -54,9 +54,6 @@ class ConfigProvider
                     'http' => [
                         \Wind\Telescope\Exception\ErrorRecord::class,
                     ],
-                    'jsonrpc' => [
-                        \Wind\Telescope\Exception\RpcErrorRecord::class,
-                    ],
                 ],
             ],
             'publish' => [
@@ -70,8 +67,13 @@ class ConfigProvider
             ],
         ];
 
-        if(class_exists('\Hyperf\JsonRpc\TcpServer::class')){
+        if (class_exists(\Hyperf\JsonRpc\TcpServer::class)) {
+
             $config['dependencies'][\Hyperf\JsonRpc\TcpServer::class] = \Wind\Telescope\Core\RpcServer::class;
+
+            $config['exceptions']['handler']['jsonrpc'] = [
+                \Wind\Telescope\Exception\RpcErrorRecord::class,
+            ];
         }
 
         return $config;
