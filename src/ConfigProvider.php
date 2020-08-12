@@ -18,10 +18,10 @@ class ConfigProvider
         if (env('TELESCOPE_ENABLED') === false) {
             return [];
         }
-        return [
+
+        $config = [
             'dependencies' => [
                 \Hyperf\HttpServer\Server::class => \Wind\Telescope\Core\Server::class,
-                \Hyperf\JsonRpc\TcpServer::class => \Wind\Telescope\Core\RpcServer::class,
             ],
             'commands' => [
                 \Wind\Telescope\Command\ClearCommand::class,
@@ -69,5 +69,11 @@ class ConfigProvider
                 ],
             ],
         ];
+
+        if(class_exists('\Hyperf\JsonRpc\TcpServer::class')){
+            $config['dependencies'][\Hyperf\JsonRpc\TcpServer::class] = \Wind\Telescope\Core\RpcServer::class;
+        }
+
+        return $config;
     }
 }
