@@ -1,6 +1,6 @@
 ### Get Started
 
-参考laravel telescope的代码开发出来的适用了hyperf的调试工具
+参考laravel telescope的代码开发出来的适用于hyperf的调试工具
 
 `composer require windawake/hyperf-telescope dev-master`
 
