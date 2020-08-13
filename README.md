@@ -40,4 +40,4 @@ TELESCOPE_QUERY_SLOW=50 #单位毫秒
 因为修改了内核代码，不能应用线上环境
 
 ## 效果图
-<img src="./preview01.jpg" width="90%">
+<img src="./preview.jpg">
