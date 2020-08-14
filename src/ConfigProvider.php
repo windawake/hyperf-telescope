@@ -65,6 +65,18 @@ class ConfigProvider
                     'destination' => BASE_PATH . '/migrations/2020_08_03_064816_telescope_entries.php', // 复制为这个路径下的该文件
                 ],
             ],
+            'processes' => [
+                \Hyperf\Crontab\Process\CrontabDispatcherProcess::class,
+            ],
+            'crontab' => [
+                'enable' => true,
+                // 通过配置文件定义的定时任务
+                'crontab' => [
+                    // Callback类型定时任务（默认）
+                    (new \Hyperf\Crontab\Crontab())->setName('Process')->setRule('*/3 * * * * *')->setCallback([\Wind\Telescope\Task\DatabaseTask::class, 'execute'])->setMemo('每三秒执行一次写入数据库'),
+                ],
+            ],
+            'linklist' => (new Linklist()),
         ];
 
         if (class_exists(\Hyperf\JsonRpc\TcpServer::class)) {
