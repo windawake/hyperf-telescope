@@ -31,6 +31,15 @@ class TelescopeEntryTagModel extends Model
      */
     protected $table = 'telescope_entries_tags';
 
+<<<<<<< Updated upstream
+=======
+    /**
+     * connection name
+     * @var string
+     */
+    protected $connection = 'telescope';
+    
+>>>>>>> Stashed changes
     /**
      * The attributes that are mass assignable.
      *
